@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">plantholic</string>
+
+
+    <string name="facebook_app_id">804021703887872</string>
+
+    <string name="fb_login_protocol_scheme">fb804021703887872</string>
+</resources>
