@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 class Details extends StatelessWidget {
   // Declare a field that holds the Todo.
-  final String soil,water,sun,sunl;
+  final String soil,water,sun,sunl,img;
   final String care;
   final String name,seed,seedl,cut,crom,crown,inw,bulb;
   // In the constructor, require a Todo.
-  Details({Key key,@required this.seed,@required this.seedl,@required this.cut,@required this.bulb,@required this.inw,@required this.crom,@required this.crown, @required this.soil, @required this.water, @required this.sun,@required this.sunl,@required this.care, @required this.name}) : super(key: key);
+  Details({Key key,this.img,@required this.seed,@required this.seedl,@required this.cut,@required this.bulb,@required this.inw,@required this.crom,@required this.crown, @required this.soil, @required this.water, @required this.sun,@required this.sunl,@required this.care, @required this.name}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class Details extends StatelessWidget {
       
       body: ListView(
         children: <Widget>[
-          Image.network("https://www.almanac.com/sites/default/files/styles/primary_image_in_article/public/image_nodes/shasta-daisies-plant-grow.jpg?itok=cOUd7rGn",fit:BoxFit.fill,height: 200,),
+          Image.network(img,fit:BoxFit.fill,height: 200,),
             (soil!="")?Text("Soil:",textScaleFactor: 2.5,style: TextStyle(fontWeight: FontWeight.bold)):Text(""),
             (soil!="")?Text("    "+soil,textScaleFactor: 1.1,style: TextStyle(color: Colors.black87)):Text(""),
             (water!="")?Text("Water:",textScaleFactor: 2.5,style: TextStyle(fontWeight: FontWeight.bold)):Text(""),

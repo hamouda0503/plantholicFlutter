@@ -80,7 +80,7 @@ class _MyHomePageState extends State<Listc> {
                 Navigator.push(
                             context,
                             new MaterialPageRoute(
-                                builder: (ctxt) => new Details(seed:data[i]["seed"],seedl:data[i]["seedlings"],cut:data[i]["cuttings"],bulb:data[i]["bulb"],inw:data[i]["inwater"],crom:data[i]["crom"],crown:data[i]["crown"],soil:data[i]["soil"],water:data[i]["water"],sun:data[i]["sunlight"],sunl:data[i]["sunlink"],care:data[i]["caring"],name:data[i]["name"])),
+                                builder: (ctxt) => new Details(img:data[i]["img1"],seed:data[i]["seed"],seedl:data[i]["seedlings"],cut:data[i]["cuttings"],bulb:data[i]["bulb"],inw:data[i]["inwater"],crom:data[i]["crom"],crown:data[i]["crown"],soil:data[i]["soil"],water:data[i]["water"],sun:data[i]["sunlight"],sunl:data[i]["sunlink"],care:data[i]["caring"],name:data[i]["name"])),
                           );
               });
         },

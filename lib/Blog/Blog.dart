@@ -56,7 +56,7 @@ class Blog extends StatelessWidget {
                           width: 5,
                         ),
                         Text(
-                          addBlogModel.comment.toString(),
+                          addBlogModel.comments.toString(),
                           style: TextStyle(fontSize: 15),
                         ),
                         SizedBox(
@@ -70,7 +70,7 @@ class Blog extends StatelessWidget {
                           width: 8,
                         ),
                         Text(
-                          addBlogModel.count.toString(),
+                          addBlogModel.like.toString(),
                           style: TextStyle(fontSize: 15),
                         ),
                         SizedBox(

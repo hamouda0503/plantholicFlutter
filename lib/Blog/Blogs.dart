@@ -42,13 +42,13 @@ class _BlogsState extends State<Blogs> {
                       children: <Widget>[
                         InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (contex) => Blog(
-                                          addBlogModel: item,
-                                          networkHandler: networkHandler,
-                                        )));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (contex) => Blog(
+                            //               addBlogModel: item,
+                            //               networkHandler: networkHandler,
+                            //             )));
                           },
                           child: BlogCard(
                             addBlogModel: item,

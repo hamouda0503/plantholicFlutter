@@ -7,8 +7,6 @@ import 'dart:async';
 class Dictionary extends StatelessWidget {
   //.................................Dictionary
 
-
-  
   @override
   Widget build(BuildContext context) {
     print('dzx');

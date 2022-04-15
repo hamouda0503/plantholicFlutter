@@ -5,9 +5,9 @@ part 'addBlogModels.g.dart';
 @JsonSerializable()
 class AddBlogModel {
   String coverImage;
-  int count;
+  int like;
   int share;
-  int comment;
+  List<dynamic> comments;
   @JsonKey(name: "_id")
   String id;
   String username;
@@ -16,9 +16,9 @@ class AddBlogModel {
 
   AddBlogModel(
       {this.coverImage,
-      this.count,
+      this.like,
       this.share,
-      this.comment,
+      this.comments,
       this.id,
       this.username,
       this.body,
@@ -27,4 +27,3 @@ class AddBlogModel {
       _$AddBlogModelFromJson(json);
   Map<String, dynamic> toJson() => _$AddBlogModelToJson(this);
 }
-
