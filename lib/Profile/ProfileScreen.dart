@@ -84,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "HELLOOO! ",
+                  "HELLO ",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 30,

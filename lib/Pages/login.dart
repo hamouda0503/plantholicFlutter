@@ -246,20 +246,14 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(
           height: 5,
         ),
-        TextField(
+        Container(
+          decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30)
+    ),
+          child: TextField(
 
-          obscureText: obscureText,
-          controller: _usernameController,
-          decoration: InputDecoration(
-
-            errorText: validate ? null : errorText,
-            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400])),
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400])),
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.Green)),
+            obscureText: obscureText,
+            controller: _usernameController,
 
           ),
         ),

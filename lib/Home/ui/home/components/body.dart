@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 
+import 'TipComponent.dart';
 import 'featurred_plants.dart';
 import 'header_with_seachbox.dart';
 import 'recomend_plants.dart';
@@ -17,6 +18,7 @@ class Body extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           HeaderWithSearchBox(size: size),
+          TipComponent(),
           TitleWithMoreBtn(title: "Recomended Plants", press: () {}),
           RecomendsPlants(),
           TitleWithMoreBtn(title: "Featured Tutos", press: () {}),

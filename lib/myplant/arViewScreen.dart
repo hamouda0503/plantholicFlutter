@@ -15,8 +15,8 @@ class _ARViewScreenState extends State<ARViewScreen> {
   ArCoreController arCoreController;
 
   void whenArCoreViewCreared(ArCoreController controller){
-      arCoreController =controller;
-      arCoreController.onPlaneTap=controlOnPlaneTap;
+    arCoreController =controller;
+    arCoreController.onPlaneTap=controlOnPlaneTap;
   }
 
   void controlOnPlaneTap(List<ArCoreHitTestResult> result){

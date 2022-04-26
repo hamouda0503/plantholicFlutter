@@ -1,17 +1,15 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-
 import 'Model/response_model.dart';
 
 class NetworkHandler {
   var log = Logger();
   FlutterSecureStorage storage = FlutterSecureStorage();
 
-  // String baseUrl = "https://plantholic.herokuapp.com";
+  //String baseUrl = "https://plantholic.herokuapp.com";
   String baseUrl = "http://192.168.1.69:5000";
   ResponseModel response = ResponseModel();
 

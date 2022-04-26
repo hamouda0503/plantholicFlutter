@@ -37,6 +37,7 @@ class _BlogCardState extends State<BlogCard> {
     });
   }
 
+
   @override
   void initState() {
     // TODO: implement initState
@@ -44,6 +45,7 @@ class _BlogCardState extends State<BlogCard> {
     fetchData();
     bytes = base64.decode(widget.addBlogModel.coverImage);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +157,7 @@ class _BlogCardState extends State<BlogCard> {
                       ),
                       IconButton(
                           onPressed: () async{
-                            Navigator.push(context, MaterialPageRoute(builder:(context)=>Comments(model:widget.addBlogModel)));
+                            Navigator.push(context, MaterialPageRoute(builder:(context)=>Comments(id:widget.addBlogModel.id)));
                           },
                           icon: Icon(
                             UniconsLine.comment_lines,

@@ -1,4 +1,5 @@
 import 'package:plantholic/Blog/listcreation.dart';
+import 'package:plantholic/app_colors.dart';
 import 'package:plantholic/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -9,23 +10,23 @@ class Dictionary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('dzx');
     debugShowCheckedModeBanner: false;
-    const green = const Color(0xff00cf00);
+    // const green = const Color(0xff00cf00);
     return Scaffold(
-        backgroundColor: Colors.lightGreenAccent,
+        backgroundColor: AppColors.Grey,
         appBar: AppBar(
-          title: Text('Plantopedia'),
-          backgroundColor: green,
+          title: Text('Plantopedia',style: TextStyle(fontFamily: "Butler",color: AppColors.Blue,fontWeight: FontWeight.bold),),
+          backgroundColor: AppColors.Grey,
+          elevation: 0,
         ),
         body: Card(
             elevation: 0,
-            color: Colors.lightGreenAccent,
+            color: AppColors.Grey ,
             child: ListView(
               scrollDirection: Axis.vertical,
               children: <Widget>[
                 Container(
-                  color: Colors.lightGreenAccent,
+                  color: AppColors.Grey,
                   padding: EdgeInsets.all(20),
                   child: new SizedBox(
                     height: 100,
@@ -41,10 +42,10 @@ class Dictionary extends StatelessWidget {
                           ),
                           Text("  Medicinal Plants",
                               style: TextStyle(fontSize: 20)),
-                          Icon(Icons.arrow_right, size: 60, )
+                          Icon(Icons.arrow_right, size: 30, )
                         ],
                       ),
-                      highlightColor: green,
+                      highlightColor: AppColors.Grey,
                       onPressed: () {
                         Navigator.push(
                             context,
@@ -56,11 +57,12 @@ class Dictionary extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  color: Colors.lightGreenAccent,
+                  color: AppColors.Grey,
                   padding: EdgeInsets.all(20),
                   child: new SizedBox(
                     height: 100,
                     child: RaisedButton(
+                      color: Colors.white,
                       elevation: 0,
                       child: Row(
                         children: <Widget>[
@@ -71,7 +73,7 @@ class Dictionary extends StatelessWidget {
                           ),
                           Text("  Flowering Plants",
                               style: TextStyle(fontSize: 20)),
-                          Icon(Icons.arrow_right, size: 60)
+                          Icon(Icons.arrow_right, size: 30)
                         ],
                       ),
                       onPressed: () {
@@ -85,7 +87,7 @@ class Dictionary extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  color: Colors.lightGreenAccent,
+                  color: AppColors.Grey,
                   padding: EdgeInsets.all(20),
                   child: new SizedBox(
                     height: 100,
@@ -101,7 +103,7 @@ class Dictionary extends StatelessWidget {
                           ),
                           Text("  Aromatic Plants",
                               style: TextStyle(fontSize: 20)),
-                          Icon(Icons.arrow_right, size: 60)
+                          Icon(Icons.arrow_right, size: 30)
                         ],
                       ),
                       onPressed: () {
@@ -116,11 +118,12 @@ class Dictionary extends StatelessWidget {
                 ),
                 Container(
 
-                  color: Colors.lightGreenAccent,
+                  color: AppColors.Grey,
                   padding: EdgeInsets.all(20),
                   child: new SizedBox(
                     height: 100,
                     child: RaisedButton(
+                      color: Colors.white,
                       elevation: 0,
                       child: Row(
                         children: <Widget>[
@@ -131,7 +134,7 @@ class Dictionary extends StatelessWidget {
                           ),
                           Text("  Fruit crops        ",
                               style: TextStyle(fontSize: 20)),
-                          Icon(Icons.arrow_right, size: 60,)
+                          Icon(Icons.arrow_right, size: 30,)
                         ],
                       ),
                       onPressed: () {
@@ -145,7 +148,7 @@ class Dictionary extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  color: Colors.lightGreenAccent,
+                  color: AppColors.Grey,
                   padding: EdgeInsets.all(20),
                   child: new SizedBox(
                     height: 100,
@@ -161,7 +164,7 @@ class Dictionary extends StatelessWidget {
                           ),
                           Text("  Vegetable crops",
                               style: TextStyle(fontSize: 20)),
-                          Icon(Icons.arrow_right, size: 60)
+                          Icon(Icons.arrow_right, size: 30)
                         ],
                       ),
                       onPressed: () {

@@ -17,8 +17,24 @@ import 'Pages/HomePage.dart';
 import 'Weather/models/weather_provider.dart';
 import 'onboarding/Onboarding.dart';
 
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+// FlutterLocalNotificationsPlugin();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // var initializationSettingsAndroid = AndroidInitializationSettings("icon");
+  //
+  // var initializationSettings =
+  // InitializationSettings(android: initializationSettingsAndroid);
+  //
+  // await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+  //     onSelectNotification: (String payload) async {
+  //       if (payload != null) {
+  //         debugPrint("notificacion payload: " + payload);
+  //       }
+  //     });
   await Hive.initFlutter();
   Hive.registerAdapter(PhotoModelAdapter());
   await Hive.openBox<PhotoModel>('favorites');

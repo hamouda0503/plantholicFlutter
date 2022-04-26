@@ -7,7 +7,7 @@ import 'package:plantholic/Model/profileModel.dart';
 import 'package:plantholic/Profile/mainprofile/appointment_page.dart';
 import 'package:plantholic/Profile/profile_screen.dart';
 import 'package:plantholic/Weather/screens/loading_screen.dart';
-
+//import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../NetworkHandler.dart';
 import '../../../../app_colors.dart';
 
@@ -137,7 +137,7 @@ class _HeaderWithSearchBoxState extends State<HeaderWithSearchBox> {
               alignment: Alignment.center,
               margin: EdgeInsets.symmetric(horizontal: 20),
               padding: EdgeInsets.symmetric(horizontal: 20),
-              height: 54,
+              height: 45,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(32),

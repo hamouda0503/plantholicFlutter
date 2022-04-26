@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:plantholic/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,9 @@ class Details extends StatelessWidget {
     // Use the Todo to create the UI.
     return Scaffold(
       appBar: AppBar(
-        title: Text(name),
+        title: Text(name,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.w600,color:AppColors.Blue),),
+        backgroundColor: AppColors.Grey,
+        elevation: 0,
       ),
       
       body: ListView(
