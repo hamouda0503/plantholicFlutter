@@ -7,7 +7,7 @@ import 'package:plantholic/Profile/ProfileScreen.dart';
 import 'package:plantholic/app_colors.dart';
 import './animation/FadeAnimation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'form_validator.dart'as valid;
+import 'form_validator.dart' as valid;
 import '../NetworkHandler.dart';
 import 'HomePage.dart';
 
@@ -51,7 +51,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 40),
+          padding: EdgeInsets.symmetric(horizontal: 30),
           height: 650,
           width: double.infinity,
           child: Form(
@@ -89,8 +89,10 @@ class _SignupPageState extends State<SignupPage> {
                   children: <Widget>[
                     FadeAnimation(1.1, makeInput(label: "username")),
                     FadeAnimation(1.2, makeInputEmail(label: "Email")),
-                    FadeAnimation(1.3,
-                        makeInputPassword(label: "Password", obscureText: true)),
+                    FadeAnimation(
+                        1.3,
+                        makeInputPassword(
+                            label: "Password", obscureText: true)),
                   ],
                 ),
                 FadeAnimation(
@@ -115,8 +117,8 @@ class _SignupPageState extends State<SignupPage> {
                               "password": _passwordController.text,
                             };
                             print(data);
-                            var responseRegister =
-                                await networkHandler.post("/user/register", data);
+                            var responseRegister = await networkHandler.post(
+                                "/user/register", data);
 
                             //Login Logic added here
                             if (responseRegister.statusCode == 200 ||
@@ -125,8 +127,8 @@ class _SignupPageState extends State<SignupPage> {
                                 "username": _usernameController.text,
                                 "password": _passwordController.text,
                               };
-                              var response =
-                                  await networkHandler.post("/user/login", data);
+                              var response = await networkHandler.post(
+                                  "/user/login", data);
 
                               if (response.statusCode == 200 ||
                                   response.statusCode == 201) {
@@ -255,19 +257,45 @@ class _SignupPageState extends State<SignupPage> {
         SizedBox(
           height: 5,
         ),
-        TextFormField(
-          controller: _usernameController,
-          obscureText: obscureText,
-          decoration: InputDecoration(
-            errorText: validate ? null : errorText,
-            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400])),
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400])),
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.Green)),
-          ),
+        Stack(
+          children: [
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 0.5,
+                    blurRadius: 6,
+                    offset: Offset(3, 3), // changes position of shadow
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(
+                  10.0,
+                ),
+              ),
+            ),
+            TextFormField(
+              controller: _usernameController,
+              obscureText: obscureText,
+              decoration: InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
+                errorText: validate ? null : errorText,
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(color: Colors.white)),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(color: Colors.white)),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(color: AppColors.Green)),
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: 15,
@@ -291,10 +319,29 @@ class _SignupPageState extends State<SignupPage> {
         SizedBox(
           height: 5,
         ),
+        Stack(
+          children: [
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 0.5,
+                    blurRadius: 6,
+                    offset: Offset(3,3), // changes position of shadow
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(
+                  10.0,
+                ),
+              ),
+            ),
         TextFormField(
+
           obscureText: obscureText,
           controller: _emailController,
-          validator:(value){
+          validator: (value) {
             String email =
                 r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
             RegExp regExp = new RegExp(email);
@@ -306,17 +353,23 @@ class _SignupPageState extends State<SignupPage> {
               return null;
             }
           },
-
           decoration: InputDecoration(
+            fillColor: Colors.white,
+            filled: true,
             contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400])),
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
             border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400])),
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
             focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: AppColors.Green)),
           ),
         ),
+      ],
+    ),
         SizedBox(
           height: 15,
         ),
@@ -352,6 +405,24 @@ class _SignupPageState extends State<SignupPage> {
         SizedBox(
           height: 5,
         ),
+        Stack(
+        children: [
+        Container(
+        height: 60,
+        decoration: BoxDecoration(
+        boxShadow: [
+        BoxShadow(
+        color: Colors.grey.withOpacity(0.1),
+        spreadRadius: 0.5,
+        blurRadius: 6,
+        offset: Offset(3,3), // changes position of shadow
+        ),
+        ],
+        borderRadius: BorderRadius.circular(
+        10.0,
+        ),
+        ),
+        ),
         TextFormField(
           controller: _passwordController,
           validator: (value) {
@@ -361,6 +432,8 @@ class _SignupPageState extends State<SignupPage> {
           },
           obscureText: vis,
           decoration: InputDecoration(
+            fillColor: Colors.white,
+            filled: true,
             suffixIcon: IconButton(
               color: AppColors.Green,
               icon: Icon(vis ? Icons.visibility_off : Icons.visibility),
@@ -376,12 +449,17 @@ class _SignupPageState extends State<SignupPage> {
             ),
             contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400])),
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
             border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400])),
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
             focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: AppColors.Green)),
           ),
+        ),
+        ],
         ),
         SizedBox(
           height: 5,

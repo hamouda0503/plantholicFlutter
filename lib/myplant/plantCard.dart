@@ -12,7 +12,7 @@ import 'package:plantholic/myGarden/main_screen.dart';
 
 import '../app_colors.dart';
 
-class PlantCard extends StatelessWidget {
+class PlantCard extends StatefulWidget {
   const PlantCard({Key key, this.plantModel, this.networkHandler,this.isfavorite})
       : super(key: key);
 
@@ -20,6 +20,31 @@ class PlantCard extends StatelessWidget {
   final NetworkHandler networkHandler;
   final bool isfavorite ;
 
+  @override
+  State<PlantCard> createState() => _PlantCardState();
+}
+
+class _PlantCardState extends State<PlantCard> {
+
+
+  final elements1 = [
+    "Bromeliads",
+    "Cactus",
+    "Ferns",
+    "Figs",
+    "Ivy",
+    "Palms",
+    "Other"
+  ];
+  int findCategoryUsingIndexWhere(List plant,
+      String plantcateg) {
+    // Find the index of person. If not found, index = -1
+    final index = plant.indexWhere((element) =>
+    element == plantcateg);
+    if (index >= 0) {
+     return index;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,7 +86,7 @@ class PlantCard extends StatelessWidget {
                   // ),
                   Center(
                     child: Image.network(
-                      plantModel.image,
+                      widget.plantModel.image,
                       width: 200,
                       fit: BoxFit.cover,
                     ),
@@ -86,12 +111,12 @@ class PlantCard extends StatelessWidget {
                   padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
-                    color: isfavorite
+                    color: widget.isfavorite
                         ? Colors.pink.shade100
                         : Colors.grey.shade400,
                   ),
                   child: Icon(Icons.favorite,
-                      color: isfavorite ? Colors.pink : Colors.black),
+                      color: widget.isfavorite ? Colors.pink : Colors.black),
                 ),
               ),
             ],
@@ -100,7 +125,7 @@ class PlantCard extends StatelessWidget {
             height: 8,
           ),
           Text(
-            plantModel.name,
+            widget.plantModel.name,
             style: TextStyle(fontWeight: FontWeight.bold,fontFamily: 'poppins'),
           ),
           SizedBox(
@@ -110,7 +135,7 @@ class PlantCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(
-                plantModel.category,
+                widget.plantModel.category,
                 style: TextStyle(fontWeight: FontWeight.bold,fontFamily: 'poppins',color: AppColors.Green, fontSize: 10),
               ),
               SizedBox(width: 30,),
@@ -123,7 +148,7 @@ class PlantCard extends StatelessWidget {
                 child: InkWell(onTap:(){
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                       builder: (context) => AddInfoPlant(spieces: plantModel.category,name: plantModel.name)
+                       builder: (context) => AddInfoPlant(spieces: findCategoryUsingIndexWhere(elements1, widget.plantModel.category),name: widget.plantModel.name)
                       // builder: (context) => MainScreen()
                       ),
                   );

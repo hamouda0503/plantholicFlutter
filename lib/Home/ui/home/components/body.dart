@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plantholic/myplant/home.dart';
 
 
 import 'TipComponent.dart';
@@ -19,9 +20,13 @@ class Body extends StatelessWidget {
         children: <Widget>[
           HeaderWithSearchBox(size: size),
           TipComponent(),
-          TitleWithMoreBtn(title: "Recomended Plants", press: () {}),
+          TitleWithMoreBtn(title: "Recomended Plants", press: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>myplant()));
+          }),
           RecomendsPlants(),
-          TitleWithMoreBtn(title: "Featured Tutos", press: () {}),
+          TitleWithMoreBtn(title: "Featured Tutos", press: () {
+
+          }),
           // FeaturedPlants(),
           SizedBox(height: 20),
         ],

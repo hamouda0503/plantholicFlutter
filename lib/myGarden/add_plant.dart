@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -6,21 +8,24 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:plantholic/app_colors.dart';
 import '../NetworkHandler.dart';
 import './Modelo/plant_info.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:day_picker/day_picker.dart';
-import 'package:timezone/timezone.dart';
+//import 'package:timezone/timezone.dart';
 import 'package:direct_select/direct_select.dart';
 
-class AddInfoPlant extends StatefulWidget {
+import 'button_widget.dart';
 
+class AddInfoPlant extends StatefulWidget {
   @override
   _AddInfoPlantState createState() => _AddInfoPlantState();
-final String spieces;
-final String name;
-  AddInfoPlant({this.spieces,this.name});
+  final int spieces;
+  final String name;
+
+  AddInfoPlant({this.spieces, this.name});
 }
 
 class _AddInfoPlantState extends State<AddInfoPlant> {
@@ -38,7 +43,8 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
   PickedFile _imageFile;
 
   final ImagePicker _picker = ImagePicker();
-  File campimg ;
+  File campimg;
+
   final _globalKey = GlobalKey<FormState>();
 
   final elements1 = [
@@ -50,72 +56,165 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
     "Palms",
     "Other"
   ];
-  final elements2 = [
-    "InDoor",
-    "OutDoor"
-  ];
+  final elements2 = ["InDoor", "OutDoor"];
 
-  int selectedIndex1 = 0,
-      selectedIndex2 = 0;
+  int selectedIndex1 = 0, selectedIndex2 = 0;
 
   List<Widget> _buildItems1() {
     return elements1
         .map((val) => MySelectionItem(
-      title: val,
-    ))
+              title: val,
+            ))
         .toList();
   }
 
   List<Widget> _buildItems2() {
     return elements2
         .map((val) => MySelectionItem(
-      title: val,
-    ))
+              title: val,
+            ))
         .toList();
   }
-
 
   @override
   void initState() {
     super.initState();
+    widget.name!=null? plantnameContorller.text=widget.name:plantnameContorller.text="";
+    widget.spieces!=null? selectedIndex1=widget.spieces:selectedIndex1=0;
   }
 
+  DateTime dateTime;
+
+  String getText() {
+    if (dateTime == null) {
+      return 'Select the last time watered';
+    } else {
+      return DateFormat('MM/dd/yyyy HH:mm').format(dateTime);
+    }
+  }
+
+  Future pickDateTime(BuildContext context) async {
+    final date = await pickDate(context);
+    if (date == null) return;
+
+    final time = await pickTime(context);
+    if (time == null) return;
+
+    setState(() {
+      dateTime = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
+    });
+  }
+
+  Future<DateTime> pickDate(BuildContext context) async {
+    final initialDate = DateTime.now();
+    final newDate = await showDatePicker(
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.Green, // header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: Colors.green, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: AppColors.Green, // button text color
+              ),
+            ),
+          ),
+          child: child,
+        );
+      },
+      context: context,
+      initialDate: dateTime ?? initialDate,
+      firstDate: DateTime(DateTime.now().year - 5),
+      lastDate: DateTime(DateTime.now().year + 5),
+    );
+
+    if (newDate == null) return null;
+
+    return newDate;
+  }
+
+  Future<TimeOfDay> pickTime(BuildContext context) async {
+    final initialTime = TimeOfDay(hour: 9, minute: 0);
+    final newTime = await showTimePicker(
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.Green, // header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: Colors.green, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: AppColors.Green, // button text color
+              ),
+            ),
+          ),
+          child: child,
+        );
+      },
+      context: context,
+      initialTime: dateTime != null
+          ? TimeOfDay(hour: dateTime.hour, minute: dateTime.minute)
+          : initialTime,
+    );
+
+    if (newTime == null) return null;
+
+    return newTime;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.green[300],
-          title: Text(
-            "Add a plant",
-            style: TextStyle(
+      backgroundColor: AppColors.Grey,
+      appBar: AppBar(
+        backgroundColor: AppColors.Grey,
+        elevation: 0,
+        title: Text(
+          "Add a plant",
+          style: TextStyle(
               fontWeight: FontWeight.bold,
-            ),
-          ),
+              fontFamily: "Poppins",
+              color: AppColors.Blue),
         ),
-        //Save Button
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.white,
-          child: SvgPicture.asset(
+      ),
+      //Save Button
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        child: SvgPicture.asset(
           'assets/svg/save.svg',
           width: 35,
           height: 35,
         ),
         onPressed: () async {
-
           try {
+            Uint8List bytes = await campimg.readAsBytes();
+            setState(() {
+              img64 = base64.encode(bytes);
+              img64 = base64.normalize(img64);
+            });
             Map<String, String> data = {
-              "plant_name":plantnameContorller.text,
-              "nickname":nicknameControlller.text,
-              "spot":"bouba12345",
-              "image":"bouba12345",
-              "specie":"",
-              "lastWatered":"bouba12345",
-              "waterCycle":"bouba12345",
-              "nextWater":"",
-              "nextWaterDate":"bouba12345"
+              "plant_name": plantnameContorller.text,
+              "nickname": nicknameControlller.text,
+              "spot": elements2[selectedIndex2],
+              "image": img64,
+              "specie": elements1[selectedIndex1],
+              "lastWatered": getText(),
+              "waterCycle": "0",
+              "nextWater": "0",
+              "nextWaterDate": "0"
             };
-            print (data);
+            print(data);
             var response = await networkHandler.post("/myplant/addPlant", data);
             if (response.statusCode == 200 || response.statusCode == 201) {
               Navigator.pop(context);
@@ -124,16 +223,16 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
             Scaffold.of(context).showSnackBar(
                 SnackBar(content: Text("There is missing information")));
           }
-
         },
       ),
       body: Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(10.0),
         child: Center(
           child: Form(
             key: _globalKey,
             child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 children: <Widget>[
                   SizedBox(
                     height: 45,
@@ -150,12 +249,21 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
                   SizedBox(
                     height: 20,
                   ),
+                  ButtonHeaderWidget(
+                    text: getText(),
+                    onClicked: () => pickDateTime(context),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0),
                     child: Text(
                       "Specie :",
                       style: TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.w500,fontFamily: "Poppins"),
+                          color: AppColors.Green,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins"),
                     ),
                   ),
                   DirectSelect(
@@ -177,7 +285,9 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
                     child: Text(
                       "Spot : ",
                       style: TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.w500,fontFamily: "Poppins"),
+                          color: AppColors.Green,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins"),
                     ),
                   ),
                   DirectSelect(
@@ -194,7 +304,6 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
                         });
                       },
                       items: _buildItems2()),
-
                 ]),
           ),
         ),
@@ -314,21 +423,27 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
                   onPressed: () {
                     takePhoto(ImageSource.camera);
                   },
-                  icon: Icon(Icons.camera ,color: AppColors.Green,),
+                  icon: Icon(
+                    Icons.camera,
+                    color: AppColors.Green,
+                  ),
                   label: Text(
                     "Camera",
                     style:
-                    TextStyle(color: AppColors.Blue, fontFamily: "Poppins"),
+                        TextStyle(color: AppColors.Blue, fontFamily: "Poppins"),
                   )),
               FlatButton.icon(
                   onPressed: () {
                     takePhoto(ImageSource.gallery);
                   },
-                  icon: Icon(Icons.image,color: AppColors.Green,),
+                  icon: Icon(
+                    Icons.image,
+                    color: AppColors.Green,
+                  ),
                   label: Text(
                     "Gallery",
                     style:
-                    TextStyle(color: AppColors.Blue, fontFamily: "Poppins"),
+                        TextStyle(color: AppColors.Blue, fontFamily: "Poppins"),
                   ))
             ],
           ),
@@ -344,74 +459,120 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
 
     setState(() async {
       _imageFile = pickedFile;
-      campimg = await FlutterNativeImage.compressImage(pickedFile.path,quality:5, percentage: 80);
+      campimg = await FlutterNativeImage.compressImage(pickedFile.path,
+          quality: 5, percentage: 80);
     });
   }
 
   Widget plantnameTextField() {
-    return TextFormField(
-      controller: plantnameContorller,
-      validator: (value) {
-        if (value.isEmpty) return "Plant Name can't be empty";
-
-        return null;
-      },
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-        enabledBorder:
-        OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-        border:
-        OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-        focusedBorder:
-        OutlineInputBorder(borderSide: BorderSide(color: AppColors.Green)),
-        prefixIcon: Icon(
-          Icons.person,
-          color: AppColors.Green,
+    return Stack(
+      children: [
+        Container(
+          height: 60,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 0.5,
+                blurRadius: 6,
+                offset: Offset(3, 3), // changes position of shadow
+              ),
+            ],
+            borderRadius: BorderRadius.circular(
+              10.0,
+            ),
+          ),
         ),
-        fillColor: Colors.white,
-        filled: true,
-        labelText: " Plant Name",
-        labelStyle: TextStyle(color: AppColors.Green),
-        //helperText: "Name can't be empty",
-        hintText: "your Plant name",
-      ),
+        TextFormField(
+          controller: plantnameContorller,
+          validator: (value) {
+            if (value.isEmpty) return "plant name can't be empty";
+            return null;
+          },
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: AppColors.Green)),
+            prefixIcon: Icon(
+              Icons.person,
+              color: AppColors.Green,
+            ),
+            fillColor: Colors.white,
+            filled: true,
+            labelText: "plant name",
+            labelStyle: TextStyle(color: AppColors.Green),
+            //helperText: "Name can't be empty",
+            hintText: "name",
+          ),
+        ),
+      ],
     );
   }
-    Widget nickameTextField() {
-      return TextFormField(
-        controller: plantnameContorller,
-        validator: (value) {
-          if (value.isEmpty) return "nickname can't be empty";
-          return null;
-        },
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-          enabledBorder:
-          OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-          border:
-          OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-          focusedBorder:
-          OutlineInputBorder(borderSide: BorderSide(color: AppColors.Green)),
-          prefixIcon: Icon(
-            Icons.person,
-            color: AppColors.Green,
+
+  Widget nickameTextField() {
+    return Stack(
+      children: [
+        Container(
+          height: 60,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 0.5,
+                blurRadius: 6,
+                offset: Offset(3, 3), // changes position of shadow
+              ),
+            ],
+            borderRadius: BorderRadius.circular(
+              10.0,
+            ),
           ),
-          fillColor: Colors.white,
-          filled: true,
-          labelText: "Nickname",
-          labelStyle: TextStyle(color: AppColors.Green),
-          //helperText: "Name can't be empty",
-          hintText: "Nickname",
         ),
-      );
+        TextFormField(
+          controller: nicknameControlller,
+          validator: (value) {
+            if (value.isEmpty) return "nickname can't be empty";
+            return null;
+          },
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: AppColors.Green)),
+            prefixIcon: Icon(
+              Icons.person,
+              color: AppColors.Green,
+            ),
+            fillColor: Colors.white,
+            filled: true,
+            labelText: "Nickname",
+            labelStyle: TextStyle(color: AppColors.Green),
+            //helperText: "Name can't be empty",
+            hintText: "Nickname",
+          ),
+        ),
+      ],
+    );
   }
-
-
 }
 
 class MySelectionItem extends StatelessWidget {
   final String title;
   final bool isForList;
+
   const MySelectionItem({Key key, this.title, this.isForList = true})
       : super(key: key);
 
@@ -421,21 +582,21 @@ class MySelectionItem extends StatelessWidget {
       height: 50.0,
       child: isForList
           ? Padding(
-        child: _buildItem(context),
-        padding: EdgeInsets.all(10.0),
-      )
-          : Card(
-        margin: EdgeInsets.symmetric(horizontal: 1.0),
-        child: Stack(
-          children: <Widget>[
-            _buildItem(context),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Icon(Icons.arrow_drop_down),
+              child: _buildItem(context),
+              padding: EdgeInsets.all(10.0),
             )
-          ],
-        ),
-      ),
+          : Card(
+              margin: EdgeInsets.symmetric(horizontal: 1.0),
+              child: Stack(
+                children: <Widget>[
+                  _buildItem(context),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Icon(Icons.arrow_drop_down),
+                  )
+                ],
+              ),
+            ),
     );
   }
 
@@ -443,8 +604,10 @@ class MySelectionItem extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       alignment: Alignment.center,
-      child: Text(title
-      ,style: TextStyle(fontFamily: "Poppins",color: AppColors.Green),),
+      child: Text(
+        title,
+        style: TextStyle(fontFamily: "Poppins", color: AppColors.Green),
+      ),
     );
   }
 }

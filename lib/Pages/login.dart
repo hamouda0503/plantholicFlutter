@@ -68,7 +68,8 @@ class _LoginPageState extends State<LoginPage> {
                               style: TextStyle(
                                   fontSize: 30,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: 'Butler',color: AppColors.Blue),
+                                  fontFamily: 'Butler',
+                                  color: AppColors.Blue),
                             )),
                         SizedBox(
                           height: 20,
@@ -79,59 +80,60 @@ class _LoginPageState extends State<LoginPage> {
                               "Login to your account",
                               style: TextStyle(
                                   fontSize: 15,
-                                  fontFamily: 'Poppins'
-                                  ,color: AppColors.Blue),
+                                  fontFamily: 'Poppins',
+                                  color: AppColors.Blue),
                             )),
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      padding: EdgeInsets.symmetric(horizontal: 30),
                       child: Column(
                         children: <Widget>[
                           FadeAnimation(1.2, makeInput(label: "Username")),
                           FadeAnimation(
                               1.3, makeInputPassword(label: "Password")),
                           SizedBox(height: 5),
-                         FadeAnimation(1.4,  Row(
-                           mainAxisAlignment: MainAxisAlignment.center,
-                           children: <Widget>[
-                             SizedBox(width:140),
-                             InkWell(
-                               onTap: (){
-                                 Navigator.push(
-                                     context,
-                                     MaterialPageRoute(
-                                       builder: (context) => ForgetPasswordCheck(),
-                                     )
-                                 );
-                               },
-                               child: Text(
-                                 "Forgot your password?",
-                                 style: TextStyle(
-                                     fontWeight: FontWeight.w600,
-                                     fontSize: 12,
-                                     fontFamily: 'Poppins'
-                                     ,color: AppColors.Green),
-                               ),
-                             ),
-
-                           ],
-                         ),),
+                          FadeAnimation(
+                            1.4,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                SizedBox(width: 140),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ForgetPasswordCheck(),
+                                        ));
+                                  },
+                                  child: Text(
+                                    "Forgot your password?",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        fontFamily: 'Poppins',
+                                        color: AppColors.Green),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
                     FadeAnimation(
                         1.5,
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 40),
+                          padding: EdgeInsets.symmetric(horizontal: 30),
                           child: Container(
-
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                ),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
                             child: MaterialButton(
                               minWidth: double.infinity,
-                              height: 60,
+                              height: 55,
                               onPressed: () async {
                                 setState(() {
                                   circular = true;
@@ -178,14 +180,16 @@ class _LoginPageState extends State<LoginPage> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(50)),
                               child: circular
-                                  ? CircularProgressIndicator(color: AppColors.Grey,)
+                                  ? CircularProgressIndicator(
+                                      color: AppColors.Grey,
+                                    )
                                   : Text(
-                                      "Login",
+                                      "LOG IN",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 18,
-                                          fontFamily: 'Poppins'
-                                          ,color: AppColors.Grey),
+                                          fontFamily: 'Poppins',
+                                          color: AppColors.Grey),
                                     ),
                             ),
                           ),
@@ -198,25 +202,26 @@ class _LoginPageState extends State<LoginPage> {
                             Text(
                               "Don't have an account?",
                               style: TextStyle(
-                                  fontSize: 15, fontFamily: 'Poppins'
-                                  ,color: AppColors.Blue),
+                                  fontSize: 15,
+                                  fontFamily: 'Poppins',
+                                  color: AppColors.Blue),
                             ),
                             InkWell(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => SignupPage(),
                                     ),
-                                        (route) => false);
+                                    (route) => false);
                               },
                               child: Text(
                                 " Sign up",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15,
-                                    fontFamily: 'Poppins'
-                                    ,color: AppColors.Green),
+                                    fontFamily: 'Poppins',
+                                    color: AppColors.Green),
                               ),
                             ),
                           ],
@@ -246,16 +251,48 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(
           height: 5,
         ),
-        Container(
-          decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30)
-    ),
-          child: TextField(
-
-            obscureText: obscureText,
-            controller: _usernameController,
-
-          ),
+        Stack(
+          children: [
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 0.5,
+                    blurRadius: 6,
+                    offset: Offset(3, 3), // changes position of shadow
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(
+                  10.0,
+                ),
+              ),
+            ),
+            Container(
+              height: 60,
+              child: TextField(
+                obscureText: obscureText,
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  errorText: validate ? null : errorText,
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(color: Colors.white)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(color: Colors.white)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(color: AppColors.Green)),
+                ),
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: 30,
@@ -279,31 +316,60 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(
           height: 5,
         ),
-        TextField(
-          controller: _passwordController,
-          obscureText: vis,
-          decoration: InputDecoration(
-            errorText: validate ? null : errorText,
-            suffixIcon: IconButton(
-              color: AppColors.Green,
-              icon: Icon(vis ? Icons.visibility_off : Icons.visibility),
-              onPressed: () {
-                setState(() {
-                  vis = !vis;
-                });
-              },
+        Stack(
+          children: [
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 0.5,
+                    blurRadius: 6,
+                    offset: Offset(3,3), // changes position of shadow
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(
+                  10.0,
+                ),
+              ),
             ),
-            helperStyle: TextStyle(
-              fontSize: 14,
+            Container(
+              height: 60,
+              child: TextField(
+                controller: _passwordController,
+                obscureText: vis,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  errorText: validate ? null : errorText,
+                  suffixIcon: IconButton(
+                    color: AppColors.Green,
+                    icon: Icon(vis ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () {
+                      setState(() {
+                        vis = !vis;
+                      });
+                    },
+                  ),
+                  helperStyle: TextStyle(
+                    fontSize: 14,
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(color: Colors.white)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(color: Colors.white)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(color: AppColors.Green)),
+                ),
+              ),
             ),
-            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400])),
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400])),
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.Green)),
-          ),
+          ],
         ),
         SizedBox(
           height: 0,
@@ -311,6 +377,4 @@ class _LoginPageState extends State<LoginPage> {
       ],
     );
   }
-
-
 }

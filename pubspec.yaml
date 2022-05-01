@@ -78,9 +78,10 @@ dependencies:
   flutter_time_picker_spinner: ^1.0.6+1
   day_picker: ^1.0.1
   path: ^1.7.0
-#  flutter_local_notifications: ^3.0.1+7
-  timezone: ^0.5.9
+  #timezone: ^0.5.9
   direct_select: ^1.0.3
+  flutter_local_notifications: ^4.0.1+2
+  dio: ^3.0.10
 
 dev_dependencies:
   hive_generator: ^0.7.2+1

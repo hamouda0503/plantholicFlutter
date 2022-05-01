@@ -27,14 +27,14 @@ class _UpdateProfileState extends State<UpdateProfile> {
   final _globalKey = GlobalKey<FormState>();
   TextEditingController _name = TextEditingController();
   TextEditingController _image = TextEditingController();
-  TextEditingController _DOB = TextEditingController();
-  TextEditingController _title = TextEditingController();
+
   TextEditingController _about = TextEditingController();
   final networkHandler = NetworkHandler();
   bool circular = false;
   ProfileModel profileModel = ProfileModel();
   String img64;
   File campimg;
+
   @override
   void initState() {
     super.initState();
@@ -47,8 +47,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
       profileModel = ProfileModel.fromJson(response["data"]);
       _name = TextEditingController(text: profileModel.name);
       _image = TextEditingController(text: profileModel.img);
-      // _DOB = TextEditingController(text: profileModel.DOB);
-      // _title = TextEditingController(text: profileModel.titleline);
       _about = TextEditingController(text: profileModel.about);
       circular = false;
     });
@@ -82,115 +80,120 @@ class _UpdateProfileState extends State<UpdateProfile> {
           //     fit: BoxFit.cover,
           //   ),
           // ),
-          child:  profileModel.img==null?CircularProgressIndicator(color: AppColors.Green,):Form(
-            key: _globalKey,
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              children: <Widget>[
-                SizedBox(
-                  height: 45,
-                ),
-                imageProfile(),
-                SizedBox(
-                  height: 20,
-                ),
-                nameTextField(),
-                SizedBox(
-                  height: 20,
-                ),
-                // professionTextField(),
-                // SizedBox(
-                //   height: 20,
-                // ),
-                // dobTextField(),
-                // SizedBox(
-                //   height: 20,
-                // ),
-                // titleTextField(),
-                // SizedBox(
-                //   height: 20,
-                // ),
-                aboutTextField(),
-                SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: MaterialButton(
-                      minWidth: double.infinity,
-                      height: 60,
-                      onPressed: () async {
-                        setState(() {
-                          circular:
-                          true;
-                        });
-                        if (_imageFile != null &&  _globalKey.currentState.validate()) {
-                          Uint8List bytes = await campimg.readAsBytes();
-                          setState(() {
-                            img64 = base64.encode(bytes);
-                            img64=base64.normalize(img64);
-                          });
-                          Map<String, String> data = {
-                            "name": _name.text,
-                            // "profession": _profession.text,
-                            // "DOB": _DOB.text,
-                            // "titleline": _title.text,
-                            "img":img64,
-                            "about": _about.text,
-                          };
-                          var response = await networkHandler.patch(
-                              "/profile/update", data);
-                          if (response.statusCode == 200 ||
-                              response.statusCode == 201) {
-                            if (_imageFile != null) {
-                              // var imageResponse =
-                              //     await networkHandler.patchImage(
-                              //         "/profile/add/image", _imageFile.path);
-                              if (response.statusCode == 200) {
-                                setState(() {
-                                  circular = false;
-                                });
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) => HomePage()),
-                                    (route) => false);
-                              }
-                            } else {
+          child: profileModel.img == null
+              ? CircularProgressIndicator(
+                  color: AppColors.Green,
+                )
+              : Form(
+                  key: _globalKey,
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    children: <Widget>[
+                      SizedBox(
+                        height: 45,
+                      ),
+                      imageProfile(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      nameTextField(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      // professionTextField(),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
+                      // dobTextField(),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
+                      // titleTextField(),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
+                      aboutTextField(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: MaterialButton(
+                            minWidth: double.infinity,
+                            height: 60,
+                            onPressed: () async {
                               setState(() {
-                                circular = false;
+                                circular:
+                                true;
                               });
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) => HomePage()),
-                                  (route) => false);
-                            }
-                          }
-                        }
-                      },
-                      color: AppColors.Green,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50)),
-                      child: circular
-                          ? CircularProgressIndicator()
-                          : Text(
-                              "Update",
-                              style: TextStyle(
-                                  letterSpacing: 1,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                  color: AppColors.Grey,
-                                  fontFamily: 'Poppins'),
-                            ),
-                    ),
+                              if (_image.text != "" &&
+                                  _globalKey.currentState.validate()) {
+                                if (_imageFile != null) {
+                                  Uint8List bytes = await campimg.readAsBytes();
+                                  setState(() {
+                                    img64 = base64.encode(bytes);
+                                    img64 = base64.normalize(img64);
+                                  });
+                                }
+                                Map<String, String> data = {
+                                  "name": _name.text,
+                                  "img": img64 == null ? _image.text : img64,
+                                  "about": _about.text,
+                                };
+                                var response = await networkHandler.patch(
+                                    "/profile/update", data);
+                                if (response.statusCode == 200 ||
+                                    response.statusCode == 201) {
+                                  if (_imageFile != null) {
+                                    // var imageResponse =
+                                    //     await networkHandler.patchImage(
+                                    //         "/profile/add/image", _imageFile.path);
+                                    if (response.statusCode == 200) {
+                                      setState(() {
+                                        circular = false;
+                                      });
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) => HomePage()),
+                                          (route) => false);
+                                    }
+                                  } else {
+                                    setState(() {
+                                      circular = false;
+                                    });
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePage()),
+                                        (route) => false);
+                                  }
+                                }
+                              }
+                            },
+                            color: AppColors.Green,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
+                            child: circular
+                                ? CircularProgressIndicator()
+                                : Text(
+                                    "Update",
+                                    style: TextStyle(
+                                        letterSpacing: 1,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                        color: AppColors.Grey,
+                                        fontFamily: 'Poppins'),
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
         ),
       ),
     );
@@ -242,6 +245,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
       ),
     );
   }
+
   MemoryImage imageFromBase64String(String base64String) {
     return MemoryImage(base64.decode(base64String));
   }
@@ -306,35 +310,62 @@ class _UpdateProfileState extends State<UpdateProfile> {
     );
     setState(() async {
       _imageFile = pickedFile;
-      campimg = await FlutterNativeImage.compressImage(pickedFile.path,quality:5, percentage: 80);
+      campimg = await FlutterNativeImage.compressImage(pickedFile.path,
+          quality: 5, percentage: 80);
     });
   }
 
   Widget nameTextField() {
-    return TextFormField(
-      controller: _name,
-      validator: (value) {
-        if (value.isEmpty) return "Name can't be empty";
-
-        return null;
-      },
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-        enabledBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-        border:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-        focusedBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: AppColors.Green)),
-        prefixIcon: Icon(
-          Icons.person,
-          color: AppColors.Green,
+    return Stack(
+      children: [
+        Container(
+          height: 60,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 0.5,
+                blurRadius: 6,
+                offset: Offset(3, 3), // changes position of shadow
+              ),
+            ],
+            borderRadius: BorderRadius.circular(
+              10.0,
+            ),
+          ),
         ),
-        labelText: "Name",
-        labelStyle: TextStyle(color: AppColors.Green),
-        //helperText: "Name can't be empty",
-        hintText: "your name",
-      ),
+        TextFormField(
+          controller: _name,
+          validator: (value) {
+            if (value.isEmpty) return "Name can't be empty";
+
+            return null;
+          },
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            filled: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: AppColors.Green)),
+
+            prefixIcon: Icon(
+              Icons.person,
+              color: AppColors.Green,
+            ),
+            labelText: "Name",
+            labelStyle: TextStyle(color: AppColors.Green),
+            //helperText: "Name can't be empty",
+            hintText: "your name",
+          ),
+        ),
+      ],
     );
   }
 
@@ -423,30 +454,55 @@ class _UpdateProfileState extends State<UpdateProfile> {
   // }
 
   Widget aboutTextField() {
-    return TextFormField(
-      maxLines: 4,
-      controller: _about,
-      validator: (value) {
-        if (value.isEmpty) return "about can't be empty";
-
-        return null;
-      },
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        enabledBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-        border:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-        focusedBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: AppColors.Green)),
-        prefixIcon: Icon(
-          Icons.description,
-          color: AppColors.Green,
+    return Stack(
+      children: [
+        Container(
+          height: 130,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 0.5,
+                blurRadius: 6,
+                offset: Offset(3, 3), // changes position of shadow
+              ),
+            ],
+            borderRadius: BorderRadius.circular(
+              10.0,
+            ),
+          ),
         ),
-        labelText: "About",
-        labelStyle: TextStyle(color: AppColors.Green),
-        hintText: "Describe yourself",
-      ),
+        TextFormField(
+          maxLines: 4,
+          controller: _about,
+          validator: (value) {
+            if (value.isEmpty) return "about can't be empty";
+
+            return null;
+          },
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            filled: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: AppColors.Green)),
+            prefixIcon: Icon(
+              Icons.description,
+              color: AppColors.Green,
+            ),
+            labelText: "About",
+            labelStyle: TextStyle(color: AppColors.Green),
+            hintText: "Describe yourself",
+          ),
+        ),
+      ],
     );
   }
 }

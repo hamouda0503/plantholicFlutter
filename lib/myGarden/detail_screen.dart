@@ -1,301 +1,269 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 
-class DetailScreen extends StatelessWidget {
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import 'package:plantholic/myGarden/Modelo/plant_info.dart';
+
+import 'package:plantholic/myGarden/core/app_text_styles.dart';
+import 'package:plantholic/myGarden/my_plants/my_plants_controller.dart';
+
+import 'package:plantholic/myGarden/widgets/watering_plant/watering_plant_widget.dart';
+import 'package:plantholic/myGarden/my_plants/my_plants.dart';
+
+
+import '../app_colors.dart';
+
+class PlantDetailsPage extends StatefulWidget {
+  final MyPlant plant;
+
+  PlantDetailsPage({
+    Key key,
+    @required this.plant,
+  }) : super(key: key);
+
+  @override
+  State<PlantDetailsPage> createState() => _PlantDetailsPageState();
+}
+
+class _PlantDetailsPageState extends State<PlantDetailsPage> {
+
+
+    final MyPlantsController _myPlantsController =MyPlantsController();
+        
+  MyPlant planty;
+  TimeOfDay selectTimeData;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    selectTimeData = TimeOfDay.fromDateTime(DateTime.parse(widget.plant.nextWaterDate));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.Grey,
+        iconTheme: IconThemeData(color: AppColors.Blue),
+        elevation: 0.0,
+      ),
       body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-
-              //CONTAINER DETAIL+CLOSE
-              Container(
-                padding: EdgeInsets.only(top: 37.0, left: 21.0, right: 7.0),
-                color: Colors.lightGreen.shade100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Detail',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black54),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(right: 15.0),
-                      height: 40,
-                      decoration: ShapeDecoration(
-                          color: Colors.lightGreen.shade200,
-                          shape: CircleBorder()
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: new Icon(Icons.clear_rounded, color: Colors.black38),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              //CONTAINER FOTO
-              Container(
-                padding: EdgeInsets.only(top: 30, right: 30, bottom: 10, left: 30),
-                height: 250,
-                width: MediaQuery.of(context).size.width,
-                color: Colors.lightGreen.shade100,
-                child: Image.asset(
-                    'images/Filodendro-Atom.png'
-                ),
-              ),
-
-              //CONTAINER CARD PLANT INFORMATION
-              Container(
-                width: MediaQuery.of(context).size.width,
-                color: Colors.lightGreen.shade100,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: Card(
-                    child: Column(
-                      children: <Widget>[
-
-                        //CONTAINER NAMA TUMBUHAN
-                        Container(
-                          padding: EdgeInsets.only(top: 30.0, bottom: 15.0, right: 21.0, left: 21.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Filodendro Atom',
-                              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(32.0),
+                  height: 390.0,
+                  decoration: BoxDecoration(
+                    color: AppColors.Grey,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      widget.plant.image == null
+                          ? SizedBox()
+                          : Image.memory(
+                              base64.decode(widget.plant.image),
+                              height: 200,
                             ),
-                          ),
+                      Text(
+                        widget.plant.nickname,
+                        style: AppTextStyles.heading24,
+                      ),
+                      SizedBox(height: 20.0),
+                      Text(
+                        widget.plant.specie,
+                        style: AppTextStyles.bodyDark,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+                WateringPlantWidget(
+                  title: "Keep the soil always moist without waterlogging. Water every "+widget.plant.waterCycle+" days. with" + widget.plant.nextWater +" ml of water",
+                  marginTop: -45.0,
+                ),
+                Text(
+                  'Choose the best time to be remembered : ',
+                  style: AppTextStyles.bodyDark,
+                ),
+                SizedBox(height: 20.0),
+                TextButton(
+                  onPressed: () => selectTime(context),
+                  child: Container(
+                    height: 32.0,
+                    width: 260.0,
+                    decoration: BoxDecoration(
+                      color: AppColors.shape,
+                      borderRadius: BorderRadius.circular(10.0),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          AppColors.shape.withOpacity(.5),
+                          AppColors.blueLight.withOpacity(.5),
+                        ],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.Grey,
+                          blurRadius: 10.0,
+                          offset: Offset(-5.0, 10.0),
                         ),
-
-                        //CONTAINER STATUS TUMBUHAN
-                        Container(
-                          height: 75,
-                          margin: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 16.0, right: 16.0),
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: <Widget>[
-
-                              //CLIPRRECT FREQUENCY - STATUS
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(28),
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 3.0, bottom: 3.0, left: 7.0, right: 7.0),
-                                  width: 165,
-                                  color: Colors.grey.shade200,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: 5.0, right: 2.0, bottom: 5.0, left: 13.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: EdgeInsets.only(right: 5.0),
-                                          child: IconButton(
-                                            onPressed: () {},
-                                            icon: new Icon(Icons.calendar_today_outlined, color: Colors.black45),
-                                          ),
-                                        ),
-                                        Column(
-                                          children: <Widget>[
-                                            Expanded(
-                                              flex: 1,
-                                              child: Align(
-                                                alignment: Alignment.bottomLeft,
-                                                child: Text(
-                                                  'FREQUENCY',
-                                                  style: TextStyle(fontSize: 12, color: Colors.black45),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  '1 / week',
-                                                  style: TextStyle(fontSize: 14, color: Colors.black45),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              //CLIPRRECT WATER - STATUS
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(28),
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 3.0, bottom: 3.0, left: 7.0, right: 7.0),
-                                  width: 165,
-                                  color: Colors.grey.shade200,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: 5.0, right: 2.0, bottom: 5.0, left: 13.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: EdgeInsets.only(right: 5.0),
-                                          child: IconButton(
-                                            onPressed: () {},
-                                            icon: new Icon(Icons.water_rounded, color: Colors.black45),
-                                          ),
-                                        ),
-                                        Column(
-                                          children: <Widget>[
-                                            Expanded(
-                                              flex: 1,
-                                              child: Align(
-                                                alignment: Alignment.bottomLeft,
-                                                child: Text(
-                                                  'WATER',
-                                                  style: TextStyle(fontSize: 12, color: Colors.black45),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  '250 ml',
-                                                  style: TextStyle(fontSize: 14, color: Colors.black45),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              //CLIPRRECT TEMP - STATUS
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(28),
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 3.0, bottom: 3.0, left: 7.0, right: 7.0),
-                                  width: 165,
-                                  color: Colors.grey.shade200,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: 5.0, right: 2.0, bottom: 5.0, left: 13.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: EdgeInsets.only(right: 5.0),
-                                          child: IconButton(
-                                            onPressed: () {},
-                                            icon: new Icon(Icons.thermostat_rounded, color: Colors.black45),
-                                          ),
-                                        ),
-                                        Column(
-                                          children: <Widget>[
-                                            Expanded(
-                                              flex: 1,
-                                              child: Align(
-                                                alignment: Alignment.bottomLeft,
-                                                child: Text(
-                                                  'TEMP',
-                                                  style: TextStyle(fontSize: 12, color: Colors.black45),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  '15-24 C',
-                                                  style: TextStyle(fontSize: 14, color: Colors.black45),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              //CLIPRRECT LIGHT - STATUS
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(28),
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 3.0, bottom: 3.0, left: 7.0, right: 7.0),
-                                  width: 165,
-                                  color: Colors.grey.shade200,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: 5.0, right: 2.0, bottom: 5.0, left: 13.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          padding: EdgeInsets.only(right: 5.0),
-                                          child: IconButton(
-                                            onPressed: () {},
-                                            icon: new Icon(Icons.wb_sunny_outlined, color: Colors.black45),
-                                          ),
-                                        ),
-                                        Column(
-                                          children: <Widget>[
-                                            Expanded(
-                                              flex: 1,
-                                              child: Align(
-                                                alignment: Alignment.bottomCenter,
-                                                child: Text(
-                                                  'LIGHT',
-                                                  style: TextStyle(fontSize: 12, color: Colors.black45),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Align(
-                                                alignment: Alignment.topCenter,
-                                                child: Text(
-                                                  'Low',
-                                                  style: TextStyle(fontSize: 14, color: Colors.black45),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        BoxShadow(
+                          color: AppColors.Grey,
+                          blurRadius: 10.0,
+                          offset: Offset(10.0, -10.0),
                         ),
-
-                        //CONTAINER DESKRIPSI TUMBUHAN
-                        //buat bisa scroll ke bawah | read more batal
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 21.0),
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ',
-                              style: TextStyle(fontSize: 14, color: Colors.black45),
-                            ),
-                          ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          '${selectTimeData.hour} horas',
+                          style: AppTextStyles.bodyDark,
+                        ),
+                        Text(
+                          '${selectTimeData.minute} min',
+                          style: AppTextStyles.bodyDark,
+                        ),
+                        Text(
+                          '0 seg',
+                          style: AppTextStyles.bodyDark,
                         ),
                       ],
                     ),
                   ),
                 ),
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.all(32.0),
+              child: Container(
+                height: 56.0,
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  onPressed: () {
+                    scheduleNotification(selectTimeData);
+                    if (!_myPlantsController.checkPlantAlreadyExists(widget.plant)) {
+                    _myPlantsController.handleAddNewPlant(
+                      widget.plant,
+                      DateTime.parse(widget.plant.nextWaterDate),
+                    );
+                    print(_myPlantsController.myPlants);
+                  }
+                  if (_myPlantsController.checkPlantAlreadyExists(widget.plant)) {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MyPlants()));
+                    print(_myPlantsController.myPlants);
+                  }
+                },
+                  
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                    ),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      AppColors.Green,
+                    ),
+                  ),
+                  child: Text(
+                    'Campo inválido, tente novamente',
+                    style: AppTextStyles.textButton,
+                  ),
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
+      backgroundColor: AppColors.Grey,
+    );
+  }
+
+  Future<Null> selectTime(BuildContext context) async {
+    var picked = await showTimePicker(
+        context: context,
+        initialTime: selectTimeData,
+        helpText: 'Selecione um horário',
+        confirmText: 'SALVAR',
+        cancelText: 'CANCELAR',
+        initialEntryMode: TimePickerEntryMode.input,
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              accentColor: AppColors.Green,
+              colorScheme: ColorScheme.light(
+                primary: AppColors.Green,
+              ),
+              timePickerTheme: TimePickerThemeData(
+                backgroundColor: Colors.white,
+                helpTextStyle: AppTextStyles.bodyDark,
+                dayPeriodColor: Colors.white,
+                dayPeriodTextColor: AppColors.Green,
+                dayPeriodTextStyle: AppTextStyles.bodyDark,
+                dialBackgroundColor: AppColors.GreenA,
+                entryModeIconColor: AppColors.Grey,
+                hourMinuteTextColor:
+                    AppColors.Green, // Número dentro do quadrado
+                hourMinuteColor:
+                    AppColors.GreenA, // Quadrado dentro dos números
+                dialHandColor: Colors.white,
+                dialTextColor: AppColors.Green,
+              ),
+            ),
+            child: child,
+          );
+        });
+
+    if (picked != null) {
+      selectTimeData = picked;
+    }
+  }
+
+  void scheduleNotification(TimeOfDay alert) async {
+    DateTime time = DateTime.parse(widget.plant.nextWaterDate);
+    var scheduleNotificationDataTime = DateTime(
+      time.year,
+      time.month,
+      time.day,
+      alert.hour,
+      alert.minute,
+    );
+
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'plant_notif',
+      'plant_notif',
+      'Channel for plant notfication',
+      icon: 'ic_launcher',
+      largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
+      sound: RawResourceAndroidNotificationSound(''),
+    );
+
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails(
+      sound: '',
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    var platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
+
+    await FlutterLocalNotificationsPlugin().schedule(
+      0,
+      'plantholic',
+      'es9ini',
+      scheduleNotificationDataTime,
+      platformChannelSpecifics,
     );
   }
 }

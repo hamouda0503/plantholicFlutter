@@ -12,29 +12,42 @@ import 'package:plantholic/Weather/screens/loading_screen.dart';
 import 'package:plantholic/reference/models/photo_model.dart';
 import 'package:plantholic/test.dart';
 import 'package:provider/provider.dart';
-
 import 'Pages/HomePage.dart';
 import 'Weather/models/weather_provider.dart';
+
 import 'onboarding/Onboarding.dart';
 
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-// FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // var initializationSettingsAndroid = AndroidInitializationSettings("icon");
-  //
-  // var initializationSettings =
-  // InitializationSettings(android: initializationSettingsAndroid);
-  //
-  // await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-  //     onSelectNotification: (String payload) async {
-  //       if (payload != null) {
-  //         debugPrint("notificacion payload: " + payload);
-  //       }
-  //     });
+  
+  var initializationSettingsAndroid =
+  AndroidInitializationSettings('ic_launcher');
+  var initializationSettingsIOS = IOSInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+    onDidReceiveLocalNotification:
+        (int id, String title, String body, String payload) async {},
+  );
+  var initializationSettings = InitializationSettings(
+    android:  initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onSelectNotification: (String payload) async {
+      if (payload != null) {
+        debugPrint('notification payload: $payload');
+      }
+    },
+  );
+
   await Hive.initFlutter();
   Hive.registerAdapter(PhotoModelAdapter());
   await Hive.openBox<PhotoModel>('favorites');
@@ -86,4 +99,41 @@ class _MyAppState extends State<MyApp> {
 
 
 
+
+
+// import 'package:flutter/material.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:plantholic/myGarden/manager/core/app_widget.dart';
+//
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+// FlutterLocalNotificationsPlugin();
+//
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//
+//   var initializationSettingsAndroid =
+//   AndroidInitializationSettings('ic_launcher');
+//   var initializationSettingsIOS = IOSInitializationSettings(
+//     requestAlertPermission: true,
+//     requestBadgePermission: true,
+//     requestSoundPermission: true,
+//     onDidReceiveLocalNotification:
+//         (int id, String title, String body, String payload) async {},
+//   );
+//   var initializationSettings = InitializationSettings(
+//     initializationSettingsAndroid,
+//     initializationSettingsIOS,
+//   );
+//
+//   await flutterLocalNotificationsPlugin.initialize(
+//     initializationSettings,
+//     onSelectNotification: (String payload) async {
+//       if (payload != null) {
+//         debugPrint('notification payload: $payload');
+//       }
+//     },
+//   );
+//
+//   runApp(AppWidget());
+// }
 

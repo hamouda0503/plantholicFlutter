@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:json_annotation/json_annotation.dart';
+
 MyPlant MyPlantFromJson(String str) => MyPlant.fromJson(json.decode(str));
 
 String MyPlantToJson(MyPlant data) => json.encode(data.toJson());
@@ -9,14 +11,13 @@ class MyPlant {
   String nickname;
   String specie;
   String image;
-
   String spot;
   String lastWatered;
   String waterCycle;
-  int nextWater;
+  String nextWater;
   String nextWaterDate;
-
-  int id;
+  @JsonKey(name: "_id")
+  String id;
 
   MyPlant(
       {this.id,
@@ -27,11 +28,11 @@ class MyPlant {
       this.spot = "",
       this.lastWatered = "00",
       this.waterCycle = "00",
-      this.nextWater = 00,
+      this.nextWater = "00",
       this.nextWaterDate = "00"});
 
   factory MyPlant.fromJson(Map<String, dynamic> json) => MyPlant(
-        id: json["id"],
+        id: json["_id"],
         plant_name: json["plant_name"],
         specie: json["specie"],
         nickname: json["nickname"],

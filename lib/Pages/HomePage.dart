@@ -16,6 +16,7 @@ import 'package:plantholic/Screen/TutoScreen.dart';
 import 'package:plantholic/Screen/category.dart';
 import 'package:plantholic/app_colors.dart';
 import 'package:plantholic/detector/pages/landing_page/landing_page.dart';
+import 'package:plantholic/myGarden/main_screen.dart';
 import 'package:plantholic/myplant/home.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:plantholic/note/note_screen.dart';
@@ -32,7 +33,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentState = 0;
   final storage = FlutterSecureStorage();
-  List<Widget> widgets = [HomeScreen(), ProfileScreen(),myplant(), ExploreMenu(),LandingPage()];
+  List<Widget> widgets = [HomeScreen(), ProfileScreen(),MainScreen(), ExploreMenu(),LandingPage()];
   List<String> titleString = ["Home", "Profile", "My Plants", "Tuto"];
 
   Widget profilePhoto = Container(

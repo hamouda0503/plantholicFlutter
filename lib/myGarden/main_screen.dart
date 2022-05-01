@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:plantholic/myGarden/add_plant.dart';
+import 'package:plantholic/myplant/home.dart';
 import '../NetworkHandler.dart';
 import './detail_screen.dart';
 import 'Modelo/plant_info.dart';
@@ -23,6 +28,62 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     fetchData();
+  }
+  void scheduleNotification(MyPlant plant) async {
+    var scheduleNotificationDataTime = DateTime.parse(plant.nextWaterDate);
+    // DateTime(
+    //   DateTime.now().year,
+    //   DateTime.now().month,
+    //   DateTime.now().day,
+    //   DateTime.now().hour,
+    //   DateTime.now().minute,
+
+    // );
+print(DateTime.parse(plant.nextWaterDate));
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'plant_notif',
+      'plant_notif',
+      'Channel for plant notfication',
+      icon: 'ic_launcher',
+      largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
+      sound: RawResourceAndroidNotificationSound(''),
+    );
+
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails(
+      sound: '',
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    var platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics,iOS: iOSPlatformChannelSpecifics);
+
+    await FlutterLocalNotificationsPlugin().schedule(
+      0,
+      'test',
+      'nabta',
+      scheduleNotificationDataTime,
+      platformChannelSpecifics,
+    );
+    print("hello");
+  }
+
+  String remainingDaysString(MyPlant plant) {
+    final DateTime now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 10);
+    final Duration remaining = DateTime.parse(plant.nextWaterDate).difference(now);
+
+    if (remaining.inDays == 0) {
+      return "Aujourd'hui";
+    }
+    else if (remaining.inDays == 1) {
+      return "Demain";
+    }
+    else if (remaining.inDays < 0) {
+      return "Dépassé";
+    }
+
+    return "${remaining.inDays} jours";
   }
 
   void fetchData() async {
@@ -55,12 +116,13 @@ class _MainScreenState extends State<MainScreen> {
                       alignment: Alignment.centerLeft,
                       child: IconButton(
                         onPressed: () {
-                          // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          //   return Settings();
-                          // }));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return AddInfoPlant();
+                          }));
+                            //  scheduleNotification(data[0]);
                         },
                         iconSize: 30.0,
-                        icon: new Icon(Icons.settings, color: Colors.black38),
+                        icon: new Icon(Icons.add, color: Colors.black38),
                       ),
                     ),
                   ),
@@ -127,7 +189,7 @@ class _MainScreenState extends State<MainScreen> {
                     return InkWell(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return DetailScreen();
+                          return PlantDetailsPage(plant:data[index]);
                         }));
                       },
                       child:
@@ -148,11 +210,11 @@ class _MainScreenState extends State<MainScreen> {
                                         child: Container(
                                           height: 100,
                                           child:
-                                          Image.asset('images/Filodendro-Atom.png', width: 100, height: 100),
+                                          data[index].image==null?SizedBox():Image.memory(base64.decode(data[index].image)),
                                         ),
                                       ),
 
-                                      //BLOK TENGAH
+
                                       Expanded(
                                         flex: 5,
                                         child: Container(
@@ -160,7 +222,7 @@ class _MainScreenState extends State<MainScreen> {
                                           child: Column(
                                             children: <Widget>[
 
-                                              //NAMA TUMBUHAN
+
                                               Expanded(
                                                 flex: 1,
                                                 child: Container(
@@ -168,34 +230,39 @@ class _MainScreenState extends State<MainScreen> {
                                                   child: Align(
                                                     alignment: Alignment.bottomLeft,
                                                     child: Text(
-                                                      'Filodendro Atom',
+                                                      data[index].nickname,
                                                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                                     ),
                                                   ),
                                                 ),
                                               ),
 
-                                              //ICON DAN UKURAN AIR
+
                                               Expanded(
                                                 flex: 1,
                                                 child: Container(
                                                   child: Row(
                                                     children: <Widget>[
-                                                      Align(
-                                                        alignment: Alignment.topLeft,
-                                                        child: IconButton(
-                                                          icon: new Icon(
-                                                            Icons.water_rounded,
-                                                            color: Colors.lightGreen.shade900,
-                                                            size: 20.0,
+                                                      InkWell(
+                                                        child: Align(
+                                                          alignment: Alignment.topLeft,
+                                                          
+                                                          child: IconButton(
+                                                            icon: new Icon(
+                                                              Icons.water_rounded,
+                                                              color: Colors.lightGreen.shade900,
+                                                              size: 20.0,
+                                                            ),
+                                                            onPressed: () {
+                                                                                                          
+                                                            },
                                                           ),
-                                                          onPressed: () {},
                                                         ),
                                                       ),
                                                       Align(
                                                         alignment: Alignment.centerLeft,
                                                         child: Text(
-                                                          '250 ml',
+                                                          remainingDaysString(data[index]),
                                                           style: TextStyle(
                                                               fontSize: 14,
                                                               color: Colors.lightGreen.shade900

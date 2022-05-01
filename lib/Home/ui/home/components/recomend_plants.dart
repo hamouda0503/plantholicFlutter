@@ -153,7 +153,7 @@ class _RecomendsPlantsState extends State<RecomendsPlants> {
   }
 
   void fetchData() async {
-    var response = await networkHandler.get("/plant/plantsInfor");
+    var response = await networkHandler.get("/plant/plantrecom");
     //print(response);
     List<dynamic> plantsMapped =
         response["data"].map((a) => Plant.fromJson(a)).toList();

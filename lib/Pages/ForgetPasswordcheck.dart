@@ -101,7 +101,7 @@ class _ForgetPasswordCheckState extends State<ForgetPasswordCheck> {
                       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
                       child: Column(
                         children: <Widget>[
-                          FadeAnimation(1.2, makeInput(label: "email")),
+                          FadeAnimation(1.2, makeInput(label: "e-mail :")),
 
                           SizedBox(height: 5),
 
@@ -175,6 +175,24 @@ class _ForgetPasswordCheckState extends State<ForgetPasswordCheck> {
         SizedBox(
           height: 5,
         ),
+        Stack(
+        children: [
+        Container(
+        height: 60,
+        decoration: BoxDecoration(
+        boxShadow: [
+        BoxShadow(
+        color: Colors.grey.withOpacity(0.1),
+        spreadRadius: 0.5,
+        blurRadius: 6,
+        offset: Offset(3,3), // changes position of shadow
+        ),
+        ],
+        borderRadius: BorderRadius.circular(
+        10.0,
+        ),
+        ),
+        ),
         TextField(
 
           obscureText: obscureText,
@@ -185,12 +203,17 @@ class _ForgetPasswordCheckState extends State<ForgetPasswordCheck> {
             errorText: validate ? null : errorText,
             contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400])),
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
             border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400])),
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
             focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: AppColors.Green)),
           ),
+        ),
+        ],
         ),
         SizedBox(
           height: 30,

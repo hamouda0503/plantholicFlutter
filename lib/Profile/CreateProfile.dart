@@ -22,32 +22,36 @@ class _CreateProfileState extends State<CreateProfile> {
   PickedFile _imageFile;
 
   final ImagePicker _picker = ImagePicker();
-  File campimg ;
+  File campimg;
+
   final _globalKey = GlobalKey<FormState>();
   TextEditingController _name = TextEditingController();
-  TextEditingController _profession = TextEditingController();
-  TextEditingController _DOB = TextEditingController();
-  TextEditingController _title = TextEditingController();
   TextEditingController _about = TextEditingController();
   final networkHandler = NetworkHandler();
   bool circular = false;
   String img64;
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
         body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/back.jpg"),
-              fit: BoxFit.cover,
-            ),
-          ),
+          // decoration: BoxDecoration(
+          //   image: DecorationImage(
+          //     image: AssetImage("assets/back.jpg"),
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
           child: Form(
             key: _globalKey,
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 100),
+
               children: <Widget>[
                 SizedBox(
                   height: 45,
@@ -60,18 +64,6 @@ class _CreateProfileState extends State<CreateProfile> {
                 SizedBox(
                   height: 20,
                 ),
-                // professionTextField(),
-                // SizedBox(
-                //   height: 20,
-                // ),
-                // dobTextField(),
-                // SizedBox(
-                //   height: 20,
-                // ),
-                // titleTextField(),
-                // SizedBox(
-                //   height: 20,
-                // ),
                 aboutTextField(),
                 SizedBox(
                   height: 20,
@@ -86,15 +78,15 @@ class _CreateProfileState extends State<CreateProfile> {
                       height: 60,
                       onPressed: () async {
                         setState(() {
-                          circular:true;
+                          circular:
+                          true;
                         });
 
                         if (_globalKey.currentState.validate()) {
                           Uint8List bytes = await campimg.readAsBytes();
                           setState(() {
                             img64 = base64.encode(bytes);
-                            img64=base64.normalize(img64);
-
+                            img64 = base64.normalize(img64);
                           });
                           Map<String, String> data = {
                             "name": _name.text,
@@ -214,6 +206,7 @@ class _CreateProfileState extends State<CreateProfile> {
         vertical: 20,
       ),
       child: Column(
+
         children: <Widget>[
           Text(
             "Choose Profile photo",
@@ -230,7 +223,10 @@ class _CreateProfileState extends State<CreateProfile> {
                   onPressed: () {
                     takePhoto(ImageSource.camera);
                   },
-                  icon: Icon(Icons.camera ,color: AppColors.Green,),
+                  icon: Icon(
+                    Icons.camera,
+                    color: AppColors.Green,
+                  ),
                   label: Text(
                     "Camera",
                     style:
@@ -240,7 +236,10 @@ class _CreateProfileState extends State<CreateProfile> {
                   onPressed: () {
                     takePhoto(ImageSource.gallery);
                   },
-                  icon: Icon(Icons.image,color: AppColors.Green,),
+                  icon: Icon(
+                    Icons.image,
+                    color: AppColors.Green,
+                  ),
                   label: Text(
                     "Gallery",
                     style:
@@ -260,147 +259,116 @@ class _CreateProfileState extends State<CreateProfile> {
 
     setState(() async {
       _imageFile = pickedFile;
-      campimg = await FlutterNativeImage.compressImage(pickedFile.path,quality:5, percentage: 80);
+      campimg = await FlutterNativeImage.compressImage(pickedFile.path,
+          quality: 5, percentage: 80);
     });
   }
 
   Widget nameTextField() {
-    return TextFormField(
-      controller: _name,
-      validator: (value) {
-        if (value.isEmpty) return "Name can't be empty";
-
-        return null;
-      },
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-        enabledBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-        border:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-        focusedBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: AppColors.Green)),
-        prefixIcon: Icon(
-          Icons.person,
-          color: AppColors.Green,
+    return Stack(
+      children: [
+        Container(
+          height: 60,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 0.5,
+                blurRadius: 6,
+                offset: Offset(3, 3), // changes position of shadow
+              ),
+            ],
+            borderRadius: BorderRadius.circular(
+              10.0,
+            ),
+          ),
         ),
-        labelText: "Name",
-        labelStyle: TextStyle(color: AppColors.Green),
-        //helperText: "Name can't be empty",
-        hintText: "your name",
-      ),
+        TextFormField(
+          controller: _name,
+          validator: (value) {
+            if (value.isEmpty) return "Name can't be empty";
+
+            return null;
+          },
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            filled: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: AppColors.Green)),
+
+            prefixIcon: Icon(
+              Icons.person,
+              color: AppColors.Green,
+            ),
+            labelText: "Name",
+            labelStyle: TextStyle(color: AppColors.Green),
+            //helperText: "Name can't be empty",
+            hintText: "your name",
+          ),
+        ),
+      ],
     );
   }
 
-  // Widget professionTextField() {
-  //   return TextFormField(
-  //     controller: _profession,
-  //     validator: (value) {
-  //       if (value.isEmpty) return "profession can't be empty";
-  //
-  //       return null;
-  //     },
-  //     decoration: InputDecoration(
-  //       contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-  //       enabledBorder:
-  //           OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-  //       border:
-  //           OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-  //       focusedBorder:
-  //           OutlineInputBorder(borderSide: BorderSide(color: AppColors.Green)),
-  //       prefixIcon: Icon(
-  //         Icons.work,
-  //         color: AppColors.Green,
-  //       ),
-  //       labelText: "Profession",
-  //       labelStyle: TextStyle(color: AppColors.Green),
-  //       // helperText: "Profession  can't be empty",
-  //       hintText: "your Proffession",
-  //     ),
-  //   );
-  // }
-  //
-  // Widget dobTextField() {
-  //   return TextFormField(
-  //     controller: _DOB,
-  //     validator: (value) {
-  //       if (value.isEmpty) return "DOB can't be empty";
-  //
-  //       return null;
-  //     },
-  //     decoration: InputDecoration(
-  //       contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-  //       enabledBorder:
-  //           OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-  //       border:
-  //           OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-  //       focusedBorder:
-  //           OutlineInputBorder(borderSide: BorderSide(color: AppColors.Green)),
-  //       prefixIcon: Icon(
-  //         Icons.calendar_today,
-  //         color: AppColors.Green,
-  //       ),
-  //       labelText: "Date Of Birth",
-  //       labelStyle: TextStyle(color: AppColors.Green),
-  //       // helperText: "Provide DOB on dd/mm/yyyy",
-  //       hintText: "05/03/2000",
-  //     ),
-  //   );
-  // }
-  //
-  // Widget titleTextField() {
-  //   return TextFormField(
-  //     controller: _title,
-  //     validator: (value) {
-  //       if (value.isEmpty) return "title can't be empty";
-  //
-  //       return null;
-  //     },
-  //     decoration: InputDecoration(
-  //       contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-  //       enabledBorder:
-  //           OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-  //       border:
-  //           OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-  //       focusedBorder:
-  //           OutlineInputBorder(borderSide: BorderSide(color: AppColors.Green)),
-  //       prefixIcon: Icon(
-  //         Icons.account_box,
-  //         color: AppColors.Green,
-  //       ),
-  //       labelText: "Title",
-  //       labelStyle: TextStyle(color: AppColors.Green),
-  //       // helperText: "Title can't be empty",
-  //       hintText: "work postion",
-  //     ),
-  //   );
-  // }
 
   Widget aboutTextField() {
-    return TextFormField(
-      maxLines: 4,
-      controller: _about,
-      validator: (value) {
-        if (value.isEmpty) return "about can't be empty";
-
-        return null;
-      },
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        enabledBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-        border:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[400])),
-        focusedBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: AppColors.Green)),
-        prefixIcon: Icon(
-          Icons.description,
-          color: AppColors.Green,
+    return Stack(
+      children: [
+        Container(
+          height: 130,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 0.5,
+                blurRadius: 6,
+                offset: Offset(3, 3), // changes position of shadow
+              ),
+            ],
+            borderRadius: BorderRadius.circular(
+              10.0,
+            ),
+          ),
         ),
-        labelText: "About",
-        labelStyle: TextStyle(color: AppColors.Green),
-        hintText: "Describe yourself",
-      ),
+        TextFormField(
+          maxLines: 4,
+          controller: _about,
+          validator: (value) {
+            if (value.isEmpty) return "about can't be empty";
+
+            return null;
+          },
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            filled: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.white)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: AppColors.Green)),
+            prefixIcon: Icon(
+              Icons.description,
+              color: AppColors.Green,
+            ),
+            labelText: "About",
+            labelStyle: TextStyle(color: AppColors.Green),
+            hintText: "Describe yourself",
+          ),
+        ),
+      ],
     );
   }
 }
