@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "340847363482",
+    "project_id": "plantholic-a1ac7",
+    "storage_bucket": "plantholic-a1ac7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340847363482:android:f429be3b0a14ea36f56623",
+        "android_client_info": {
+          "package_name": "com.example.plantholic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340847363482-jm4on1sjtqh6qiftgicas2jq9cq953p4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0WLImp7g0VEzukVY2qJYCnvojnQcPnro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340847363482-jm4on1sjtqh6qiftgicas2jq9cq953p4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:plantholic/myGarden/add_plant.dart';
 import 'package:plantholic/myplant/home.dart';
 import '../NetworkHandler.dart';
@@ -29,45 +29,45 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     fetchData();
   }
-  void scheduleNotification(MyPlant plant) async {
-    var scheduleNotificationDataTime = DateTime.parse(plant.nextWaterDate);
-    // DateTime(
-    //   DateTime.now().year,
-    //   DateTime.now().month,
-    //   DateTime.now().day,
-    //   DateTime.now().hour,
-    //   DateTime.now().minute,
+//   void scheduleNotification(MyPlant plant) async {
+//     var scheduleNotificationDataTime = DateTime.parse(plant.nextWaterDate);
+//     // DateTime(
+//     //   DateTime.now().year,
+//     //   DateTime.now().month,
+//     //   DateTime.now().day,
+//     //   DateTime.now().hour,
+//     //   DateTime.now().minute,
 
-    // );
-print(DateTime.parse(plant.nextWaterDate));
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'plant_notif',
-      'plant_notif',
-      'Channel for plant notfication',
-      icon: 'ic_launcher',
-      largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
-      sound: RawResourceAndroidNotificationSound(''),
-    );
+//     // );
+// print(DateTime.parse(plant.nextWaterDate));
+//     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+//       'plant_notif',
+//       'plant_notif',
+//       'Channel for plant notfication',
+//       icon: 'ic_launcher',
+//       largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
+//       sound: RawResourceAndroidNotificationSound(''),
+//     );
 
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails(
-      sound: '',
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-    );
+//     var iOSPlatformChannelSpecifics = IOSNotificationDetails(
+//       sound: '',
+//       presentAlert: true,
+//       presentBadge: true,
+//       presentSound: true,
+//     );
 
-    var platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics,iOS: iOSPlatformChannelSpecifics);
+//     var platformChannelSpecifics =
+//         NotificationDetails(android: androidPlatformChannelSpecifics,iOS: iOSPlatformChannelSpecifics);
 
-    await FlutterLocalNotificationsPlugin().schedule(
-      0,
-      'test',
-      'nabta',
-      scheduleNotificationDataTime,
-      platformChannelSpecifics,
-    );
-    print("hello");
-  }
+//     await FlutterLocalNotificationsPlugin().schedule(
+//       0,
+//       'test',
+//       'nabta',
+//       scheduleNotificationDataTime,
+//       platformChannelSpecifics,
+//     );
+//     print("hello");
+//   }
 
   String remainingDaysString(MyPlant plant) {
     final DateTime now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 10);

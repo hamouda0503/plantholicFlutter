@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:plantholic/myGarden/Modelo/plant_info.dart';
 
@@ -150,7 +150,7 @@ class _PlantDetailsPageState extends State<PlantDetailsPage> {
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   onPressed: () {
-                    scheduleNotification(selectTimeData);
+                    // scheduleNotification(selectTimeData);
                     if (!_myPlantsController.checkPlantAlreadyExists(widget.plant)) {
                     _myPlantsController.handleAddNewPlant(
                       widget.plant,
@@ -228,42 +228,42 @@ class _PlantDetailsPageState extends State<PlantDetailsPage> {
     }
   }
 
-  void scheduleNotification(TimeOfDay alert) async {
-    DateTime time = DateTime.parse(widget.plant.nextWaterDate);
-    var scheduleNotificationDataTime = DateTime(
-      time.year,
-      time.month,
-      time.day,
-      alert.hour,
-      alert.minute,
-    );
+  // void scheduleNotification(TimeOfDay alert) async {
+  //   DateTime time = DateTime.parse(widget.plant.nextWaterDate);
+  //   var scheduleNotificationDataTime = DateTime(
+  //     time.year,
+  //     time.month,
+  //     time.day,
+  //     alert.hour,
+  //     alert.minute,
+  //   );
 
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'plant_notif',
-      'plant_notif',
-      'Channel for plant notfication',
-      icon: 'ic_launcher',
-      largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
-      sound: RawResourceAndroidNotificationSound(''),
-    );
+  //   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+  //     'plant_notif',
+  //     'plant_notif',
+  //     'Channel for plant notfication',
+  //     icon: 'ic_launcher',
+  //     largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
+  //     sound: RawResourceAndroidNotificationSound(''),
+  //   );
 
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails(
-      sound: '',
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-    );
+  //   var iOSPlatformChannelSpecifics = IOSNotificationDetails(
+  //     sound: '',
+  //     presentAlert: true,
+  //     presentBadge: true,
+  //     presentSound: true,
+  //   );
 
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics);
+  //   var platformChannelSpecifics = NotificationDetails(
+  //       android: androidPlatformChannelSpecifics,
+  //       iOS: iOSPlatformChannelSpecifics);
 
-    await FlutterLocalNotificationsPlugin().schedule(
-      0,
-      'plantholic',
-      'es9ini',
-      scheduleNotificationDataTime,
-      platformChannelSpecifics,
-    );
-  }
+  //   await FlutterLocalNotificationsPlugin().schedule(
+  //     0,
+  //     'plantholic',
+  //     'es9ini',
+  //     scheduleNotificationDataTime,
+  //     platformChannelSpecifics,
+  //   );
+  // }
 }

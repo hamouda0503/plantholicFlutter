@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+   <!-- android:name="${applicationName}" -->
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
@@ -17,7 +17,7 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:exported="true"
+          
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
@@ -29,10 +29,17 @@
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme" />
+                
             <meta-data android:name="com.google.ar.core" android:value="required" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
 
@@ -53,16 +60,16 @@
 
 
 
-        <meta-data
+        <!-- <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name" /> -->
 
-        <activity
+        <!-- <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
@@ -73,15 +80,15 @@
 
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
-        </activity>
-        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+        </activity> -->
+        <!-- <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
     <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
         <intent-filter>
             <action android:name="android.intent.action.BOOT_COMPLETED"></action>
         </intent-filter>
-    </receiver>
+    </receiver> -->
     </application>
 
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/> -->
 </manifest>

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
@@ -17,36 +18,36 @@ import 'Weather/models/weather_provider.dart';
 
 import 'onboarding/Onboarding.dart';
 
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+// FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  var initializationSettingsAndroid =
-  AndroidInitializationSettings('ic_launcher');
-  var initializationSettingsIOS = IOSInitializationSettings(
-    requestAlertPermission: true,
-    requestBadgePermission: true,
-    requestSoundPermission: true,
-    onDidReceiveLocalNotification:
-        (int id, String title, String body, String payload) async {},
-  );
-  var initializationSettings = InitializationSettings(
-    android:  initializationSettingsAndroid,
-    iOS: initializationSettingsIOS,
-  );
+  // var initializationSettingsAndroid =
+  // AndroidInitializationSettings('ic_launcher');
+  // var initializationSettingsIOS = IOSInitializationSettings(
+  //   requestAlertPermission: true,
+  //   requestBadgePermission: true,
+  //   requestSoundPermission: true,
+  //   onDidReceiveLocalNotification:
+  //       (int id, String title, String body, String payload) async {},
+  // );
+  // var initializationSettings = InitializationSettings(
+  //   android:  initializationSettingsAndroid,
+  //   iOS: initializationSettingsIOS,
+  // );
 
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onSelectNotification: (String payload) async {
-      if (payload != null) {
-        debugPrint('notification payload: $payload');
-      }
-    },
-  );
+  // await flutterLocalNotificationsPlugin.initialize(
+  //   initializationSettings,
+  //   onSelectNotification: (String payload) async {
+  //     if (payload != null) {
+  //       debugPrint('notification payload: $payload');
+  //     }
+  //   },
+  // );
 
   await Hive.initFlutter();
   Hive.registerAdapter(PhotoModelAdapter());
@@ -66,8 +67,17 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     checkLogin();
+    // fcm();
   }
+// void fcm() async{
+
+//   final fcmToken = await FirebaseMessaging().getToken();
+//     print(fcmToken);
+// }
+
+
 
   void checkLogin() async {
     String token = await storage.read(key: "token");
@@ -81,7 +91,7 @@ class _MyAppState extends State<MyApp> {
       });
     }
   }
-
+    
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<WeatherData>(
@@ -97,43 +107,4 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-
-
-
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:plantholic/myGarden/manager/core/app_widget.dart';
-//
-// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-// FlutterLocalNotificationsPlugin();
-//
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//
-//   var initializationSettingsAndroid =
-//   AndroidInitializationSettings('ic_launcher');
-//   var initializationSettingsIOS = IOSInitializationSettings(
-//     requestAlertPermission: true,
-//     requestBadgePermission: true,
-//     requestSoundPermission: true,
-//     onDidReceiveLocalNotification:
-//         (int id, String title, String body, String payload) async {},
-//   );
-//   var initializationSettings = InitializationSettings(
-//     initializationSettingsAndroid,
-//     initializationSettingsIOS,
-//   );
-//
-//   await flutterLocalNotificationsPlugin.initialize(
-//     initializationSettings,
-//     onSelectNotification: (String payload) async {
-//       if (payload != null) {
-//         debugPrint('notification payload: $payload');
-//       }
-//     },
-//   );
-//
-//   runApp(AppWidget());
-// }
 

@@ -10,7 +10,7 @@ class NetworkHandler {
   FlutterSecureStorage storage = FlutterSecureStorage();
 
   //String baseUrl = "https://plantholic.herokuapp.com";
-  String baseUrl = "http://192.168.1.69:5000";
+  String baseUrl = "http://192.168.1.67:5000";
   ResponseModel response = ResponseModel();
 
   Future get(String url) async {
