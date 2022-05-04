@@ -117,9 +117,10 @@ class _CommentsState extends State<Comments> {
                 "content": commentController.text,
                 "username": profileModel.username,
               };
+              print(data);
               var response = await networkHandler.post(
                   "/blogpost/${widget.id}/comments", data);
-
+              print(response);
               if (response.statusCode == 200 || response.statusCode == 201) {
                 setState(() {
                   fetchData1();

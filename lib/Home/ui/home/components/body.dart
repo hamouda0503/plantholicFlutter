@@ -77,7 +77,7 @@ String notificationAlert = "alert";
 void fcm() async{
 
   final fcmToken = await FirebaseMessaging().getToken();
-    print("helloooo     "+fcmToken);
+    print(fcmToken);
 }
 
 
@@ -98,25 +98,11 @@ void fcm() async{
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => myplant()));
               }),
-          // RecomendsPlants(),
+          RecomendsPlants(),
           TitleWithMoreBtn(title: "Featured Tutos", press: () {}),
           // FeaturedPlants(),
           SizedBox(height: 20),
-          Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              notificationAlert,
-            ),
-            Text(
-              messageTitle,
-              style: Theme.of(context).textTheme.headline4,
-            ),
           ],
-        ),
-      ),
-        ],
       ),
     );
   }

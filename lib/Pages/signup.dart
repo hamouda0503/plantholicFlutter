@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:plantholic/Pages/login.dart';
@@ -28,7 +29,20 @@ class _SignupPageState extends State<SignupPage> {
   bool circular = false;
   final storage = new FlutterSecureStorage();
   static final FacebookLogin facebookSignIn = new FacebookLogin();
+  String token="";
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fcm();
+  }
 
+void fcm() async{
+
+  final fcmToken = await FirebaseMessaging().getToken();
+    print(fcmToken);
+    token=fcmToken;
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,6 +129,7 @@ class _SignupPageState extends State<SignupPage> {
                               "username": _usernameController.text,
                               "email": _emailController.text,
                               "password": _passwordController.text,
+                              "tokenmsg":token,
                             };
                             print(data);
                             var responseRegister = await networkHandler.post(
